@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Создание задачи</h1>
+<div mat-dialog-content>
+  <form [formGroup]="Form">
+    <mat-form-field appearance="outline">
+      <mat-label>Задача</mat-label>
+      <input matInput formControlName="text">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Выберете категорию</mat-label>
+      <mat-select formControlName="id">
+        <mat-option value="0">Новая категория</mat-option>
+        <mat-option
+          *ngFor="let item of data"
+          value="{{item.id}}"
+        >{{item.title}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" *ngIf="Form.value.id == 0">
+      <mat-label>Название категории</mat-label>
+      <input matInput formControlName="title">
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No</button>
+  <button mat-button [mat-dialog-close]="Form.value" cdkFocusInitial>Ok</button>
+</div>

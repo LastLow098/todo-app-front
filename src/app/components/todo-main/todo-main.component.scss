@@ -1,0 +1,17 @@
+.todo-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  &__card{
+    width: 350px;
+    margin: 20px 10px 0 10px;
+
+    &__title {
+      color: #fff;
+      font-weight: 500;
+      font-size: 1.1em;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<div class="todo-main">
+  <mat-card class="todo-main__card"  *ngFor="let item of _data">
+    <mat-card-subtitle class="todo-main__card__title">{{item.title}}</mat-card-subtitle>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let elem of item.todos">
+          <mat-checkbox
+            class="todo-main__card__checkbox"
+            color="primary"
+            [checked]="elem.isCompleted"
+            (change)="checked($event.checked, elem)"
+          >{{elem.text}}</mat-checkbox>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
