@@ -1,4 +1,6 @@
-import {Exclude, Expose} from "class-transformer";
+import {Exclude, Expose, Type} from "class-transformer";
+import {ProjectsDto} from "./projects.dto";
+import "reflect-metadata"
 
 export class TodosDto {
   @Expose()
@@ -11,8 +13,10 @@ export class TodosDto {
   isCompleted: boolean
 
   @Exclude()
-  projectsId: number
-
-  @Exclude()
   __typename: string
+
+  @Type(() => ProjectsDto)
+  project?: ProjectsDto
+
+
 }

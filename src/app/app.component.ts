@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {FormComponent} from "./components/form/form.component";
 import {DataService} from "./services/data.service";
-import {FormControl, FormGroup} from "@angular/forms";
+import {Form, FormControl, FormGroup} from "@angular/forms";
 import {ProjectsDto} from "./dto/projects.dto";
 import {plainToClass} from "class-transformer";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {TodosDto} from "./dto/todos.dto";
+import {ProjectService} from "./services/project.service";
+import {catchError, Observable, of, tap} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -15,14 +17,18 @@ import {TodosDto} from "./dto/todos.dto";
 })
 export class AppComponent {
 
-  constructor(public dialog: MatDialog, private dataService: DataService, private _snackBar: MatSnackBar) {}
+  constructor(
+    public readonly dialog: MatDialog,
+    private readonly dataService: DataService,
+    private readonly projectService: ProjectService,
+    private readonly _snackBar: MatSnackBar) {}
 
   ngOnInit() {
-    this.updateData()
   }
 
   title = 'todo-app-front';
-  data: ProjectsDto[]
+  data: ProjectsDto[] = []
+  projects$!: Observable<ProjectsDto[]>;
 
   Form: FormGroup = new FormGroup({
     text: new FormControl(),
@@ -30,25 +36,15 @@ export class AppComponent {
     title: new FormControl()
   })
 
-  updateData() {
-    let timeout = setTimeout(() => this._snackBar.open('Loading...'), 500)
-    this.dataService.getProjects().subscribe((res: any) => {
-      this.data = plainToClass(ProjectsDto, res.data.getProjects as Object[])
-      this._snackBar.dismiss()
-      clearTimeout(timeout)
-    }, error => {
-      this._snackBar.open("Error", 'close', {panelClass: "action_config"})
-    })
+  getProjects() {
+    this.projectService.getProjects().subscribe(
+      (res) => { console.log(res) },
+      (error) => { console.log(error.message, error.status) }
+    )
   }
 
-  checkedUpdate(elem: TodosDto) {
-    this.dataService.updateTodo(elem).subscribe(() => {
-      this.updateData()
-    }, error => {
-      this._snackBar.open("Error", 'close', {panelClass: "action_config"})
-      this.updateData()
-    })
-  }
+
+
 
   async openDialog() {
     const dialogRef = this.dialog.open(FormComponent, {
@@ -56,18 +52,18 @@ export class AppComponent {
       data: this.data
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dataService.createTodo(
-          result.title ? { "title": result.title } : { "id": Number(result.id) },
-          { "text": result.text })
-          .subscribe(
-            (result: any) => {
-            this.updateData()
-            }, error => {
-              this._snackBar.open("Error", 'close', {panelClass: "action_config"})
-            })
-      }
-    });
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   if (result) {
+    //     this.dataService.createTodo(
+    //       result.title ? { "title": result.title } : { "id": Number(result.id) },
+    //       { "text": result.text })
+    //       .subscribe(
+    //         (result: any) => {
+    //         this.updateData()
+    //         }, error => {
+    //           this._snackBar.open("Error", 'close', {panelClass: "action_config"})
+    //         })
+    //   }
+    // });
   }
 }

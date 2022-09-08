@@ -12,7 +12,6 @@ export class ProjectsDto {
   @Exclude()
   __typename: string
 
-  @Expose()
   @Type(() => TodosDto)
-  todos: Array<TodosDto>
+  todos?: Array<TodosDto>
 }

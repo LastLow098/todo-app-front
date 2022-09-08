@@ -9,32 +9,36 @@ export class DataQueries {
       todos {
         id,
         text,
-        isCompleted,
-        projectsId
+        isCompleted
       }
     }
   }
   `
 
   createTodo = gql`
-  mutation($project: CreateProjectsInput!, $todo: CreateTodosInput!){
-    createTodo(project: $project, createTodo: $todo) {
-      title,
-      todos {
-        text
-      }
-    }
-  }
-  `
-
-  updateTodo = gql`
-  mutation($todo:UpdateTodosInput!){
-    updateTodo(updateTodo: $todo) {
+  mutation($project: CreateProjectsInput, $todo: CreateTodosInput!) {
+    createTodo(todo: $todo, project: $project) {
       id,
       text,
       isCompleted,
-      projectsId
+      project{
+        id,
+        title
+      }
     }
-  }
-  `
+  }`
+
+  changeCompleted = gql`
+  mutation($todoId: Float!) {
+    changeCompleted(TodoId: $todoId)
+  }`
+
+  updateTodo = gql`
+  mutation($todo:UpdateTodosInput!) {
+    updateTodo(updateTodo: $todo) {
+      id,
+      text,
+      isCompleted
+    }
+  }`
 }

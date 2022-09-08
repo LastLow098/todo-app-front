@@ -1,5 +1,5 @@
-<div class="todo-main">
-  <mat-card class="todo-main__card"  *ngFor="let item of _data">
+<div class="todo-main" *ngIf="data.length > 0">
+  <mat-card class="todo-main__card"  *ngFor="let item of data">
     <mat-card-subtitle class="todo-main__card__title">{{item.title}}</mat-card-subtitle>
     <mat-divider></mat-divider>
     <mat-card-content>

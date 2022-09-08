@@ -4,6 +4,7 @@ import {classToPlain, classToPlainFromExist, plainToClass, plainToClassFromExist
 import {ProjectsDto} from "../../dto/projects.dto";
 import {TodosDto} from "../../dto/todos.dto";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {catchError, of, tap} from "rxjs";
 
 @Component({
   selector: 'app-todo-main',
@@ -12,18 +13,18 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class TodoMainComponent implements OnInit {
 
-  constructor(private readonly dataService: DataService, private _snackBar: MatSnackBar) { }
+  constructor(
+    public dataService: DataService,
+    private _snackBar: MatSnackBar) { }
 
-  @Input() set data(val: ProjectsDto[]) {
-    this._data = val
+  data: ProjectsDto[] = []
+
+  async ngOnInit() {
+    this.data = await this.dataService.getData()
   }
-  _data: ProjectsDto[] = []
-  @Output() updateData = new EventEmitter()
-
-  ngOnInit() {}
 
   checked(changes: boolean, elem: TodosDto) {
     elem.isCompleted = changes
-    this.updateData.emit(elem)
+    // this.updateData.emit(elem)
   }
 }

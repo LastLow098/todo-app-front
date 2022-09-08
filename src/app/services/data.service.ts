@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from "apollo-angular";
 import {DataQueries} from "../queries/data.queries";
-import {lastValueFrom} from "rxjs";
 import {TodosDto} from "../dto/todos.dto";
 import {ProjectsDto} from "../dto/projects.dto";
-import {plainToClass} from "class-transformer";
+import {ProjectService} from "./project.service";
+import {catchError, delayWhen, firstValueFrom, of, retryWhen, shareReplay, take, tap, throwError, timer} from "rxjs";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +13,19 @@ import {plainToClass} from "class-transformer";
 export class DataService {
 
   constructor(private apollo: Apollo,
-              private dataQueries: DataQueries) { }
+              private projectService: ProjectService,
+              private _snackBar: MatSnackBar) { }
 
-  getProjects() {
-    return this.apollo.watchQuery({ fetchPolicy: 'no-cache', query: this.dataQueries.getProjects }).valueChanges
-  }
+  public data: ProjectsDto[] = []
 
-  updateTodo(variables: TodosDto) {
-    return this.apollo.mutate({ mutation: this.dataQueries.updateTodo, variables: {"todo" : variables}})
-  }
+  async getData(): Promise<ProjectsDto[]> {
+    let timeOut = setTimeout(() => this._snackBar.open('Loading...'), 500)
 
-  createTodo(varProject: any, varTodo: any) {
-    return this.apollo.mutate({ mutation: this.dataQueries.createTodo, variables: {"project": varProject,  "todo" : varTodo}})
+    if (this.data.length === 0) this.data = await firstValueFrom(this.projectService.getProjects())
+      .then(res => { return res })
+      .catch((err) => { this._snackBar.open(err.message, 'close', {panelClass: "action_config"}); return [] })
+
+    clearTimeout(timeOut)
+    return this.data
   }
 }
