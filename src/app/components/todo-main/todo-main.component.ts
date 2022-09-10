@@ -13,18 +13,15 @@ import {catchError, of, tap} from "rxjs";
 })
 export class TodoMainComponent implements OnInit {
 
-  constructor(
-    public dataService: DataService,
-    private _snackBar: MatSnackBar) { }
+  constructor(private readonly dataService: DataService) { }
 
-  data: ProjectsDto[] = []
+  data: ProjectsDto[]
 
   async ngOnInit() {
     this.data = await this.dataService.getData()
   }
 
-  checked(changes: boolean, elem: TodosDto) {
-    elem.isCompleted = changes
-    // this.updateData.emit(elem)
+  checked(elem: TodosDto) {
+    console.log(elem)
   }
 }
