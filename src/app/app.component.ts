@@ -36,12 +36,6 @@ export class AppComponent {
     title: new FormControl()
   })
 
-  getProjects() {
-    this.projectService.getProjects().subscribe(
-      (res) => { console.log(res) },
-      (error) => { console.log(error.message, error.status) }
-    )
-  }
 
 
 

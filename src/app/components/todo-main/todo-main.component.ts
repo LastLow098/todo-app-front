@@ -5,6 +5,7 @@ import {ProjectsDto} from "../../dto/projects.dto";
 import {TodosDto} from "../../dto/todos.dto";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError, of, tap} from "rxjs";
+import {MatCheckboxChange} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-todo-main',
@@ -13,7 +14,7 @@ import {catchError, of, tap} from "rxjs";
 })
 export class TodoMainComponent implements OnInit {
 
-  constructor(private readonly dataService: DataService) { }
+  constructor(public readonly dataService: DataService) { }
 
   data: ProjectsDto[]
 
@@ -21,7 +22,7 @@ export class TodoMainComponent implements OnInit {
     this.data = await this.dataService.getData()
   }
 
-  checked(elem: TodosDto) {
-    console.log(elem)
+  async checked(elem: TodosDto) {
+    await this.dataService.changeCompleted(elem)
   }
 }

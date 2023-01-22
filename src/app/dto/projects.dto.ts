@@ -13,5 +13,5 @@ export class ProjectsDto {
   __typename: string
 
   @Type(() => TodosDto)
-  todos?: Array<TodosDto>
+  todos: Array<TodosDto>
 }

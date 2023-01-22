@@ -4,12 +4,12 @@
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-list>
-        <mat-list-item *ngFor="let elem of item.todos">
+        <mat-list-item *ngFor="let elem of item.todos; let i = index">
           <mat-checkbox
             class="todo-main__card__checkbox"
             color="primary"
             [checked]="elem.isCompleted"
-            (click)="checked(elem)"
+            (click)="checked(elem); this.dataService.isRequestSend ? $event.preventDefault() : null"
           >{{elem.text}}</mat-checkbox>
         </mat-list-item>
       </mat-list>

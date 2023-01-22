@@ -16,14 +16,14 @@ export class DataQueries {
   `
 
   createTodo = gql`
-  mutation($project: CreateProjectsInput, $todo: CreateTodosInput!) {
-    createTodo(todo: $todo, project: $project) {
+  mutation($todo: CreateTodosInput!) {
+    createTodo(todo: $todo) {
       id,
-      text,
-      isCompleted,
-      project{
+      title,
+      todos {
         id,
-        title
+        text,
+        isCompleted
       }
     }
   }`
@@ -31,14 +31,5 @@ export class DataQueries {
   changeCompleted = gql`
   mutation($todoId: Float!) {
     changeCompleted(TodoId: $todoId)
-  }`
-
-  updateTodo = gql`
-  mutation($todo:UpdateTodosInput!) {
-    updateTodo(updateTodo: $todo) {
-      id,
-      text,
-      isCompleted
-    }
   }`
 }
